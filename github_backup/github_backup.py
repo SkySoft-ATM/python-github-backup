@@ -1095,11 +1095,13 @@ def fetch_repository(name,
             git_command = ['git', 'remote', 'set-url', 'origin', remote_url]
             logging_subprocess(git_command, None, cwd=local_dir)
 
-        if lfs_clone:
-            git_command = ['git', 'lfs', 'fetch', '--all', '--prune']
-        else:
-            git_command = ['git', 'fetch', '--all', '--force', '--tags', '--prune']
+        # Fetch git index.
+        git_command = ['git', 'fetch', '--all', '--force', '--tags', '--prune']
         logging_subprocess(git_command, None, cwd=local_dir)
+        if lfs_clone:
+            # Fetch git LFS.
+            git_command = ['git', 'lfs', 'fetch', '--all', '--prune']
+            logging_subprocess(git_command, None, cwd=local_dir)
     else:
         log_info('Cloning {0} repository from {1} to {2}'.format(
             name,
